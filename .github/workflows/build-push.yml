@@ -24,15 +24,16 @@ jobs:
         id: extract_tag
         run: echo "::set-output name=tag::${GITHUB_REF#refs/tags/}"
       
-      - name: downcase REPO
+      - name: Lowercase REPO
+        id: lower-repo
         run: |
-          echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+          echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
 
       - name: Build and tag Docker image
         run: |
-          docker build . -t ghcr.io/${{ REPO }}:${{ steps.extract_tag.outputs.tag }}
+          docker build . -t ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ steps.extract_tag.outputs.tag }}
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ REPO }}:${{ steps.extract_tag.outputs.tag }}
+          docker push ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ steps.extract_tag.outputs.tag }}
 
