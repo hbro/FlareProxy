@@ -26,9 +26,9 @@ jobs:
 
       - name: Build and tag Docker image
         run: |
-          docker build . -t ghcr.io/${{ github.repository }}:${{ steps.extract_tag.outputs.tag }}
+          docker build . -t ghcr.io/${{ github.repository|lower }}:${{ steps.extract_tag.outputs.tag }}
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ github.repository }}:${{ steps.extract_tag.outputs.tag }}
+          docker push ghcr.io/${{ github.repository|lower }}:${{ steps.extract_tag.outputs.tag }}
 
